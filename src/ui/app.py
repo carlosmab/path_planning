@@ -1,19 +1,12 @@
-from dataclasses import dataclass
 import tkinter as tk
 from PIL import ImageTk
 
+from ..space.space import Position, Space
 
-from space.space import Space
-
-@dataclass
-class Position:
-    x: int
-    y: int
-    
 
 CIRCLE_RADIUS = 10
     
-    
+
 class App(tk.Tk):
     waiting_first_point: bool = False
     waiting_second_point: bool = False
@@ -22,6 +15,7 @@ class App(tk.Tk):
     start_point: Position
     end_point: Position
     ovals_ids: list[int] = []
+    lines_ids: list[int] = []
     
     def __init__(self, space: Space = Space()):
         super(App, self).__init__()
@@ -97,7 +91,12 @@ class App(tk.Tk):
             position.x + CIRCLE_RADIUS, 
             position.y + CIRCLE_RADIUS)
         self.ovals_ids.append(self.image_canvas.create_oval(circle_coords, fill=color))
-        
+    
+    def draw_line(self, position1: Position, position2: Position) -> None:
+        self.lines_ids.append(self.image_canvas.create_line(
+            position1.x, position1.y, position2.x, position2.y, fill="gray", width=1))
+    
+    
     def show_space(self):
         self.image_canvas.create_image(0, 0, anchor="nw", image=self.image_photo)
         
